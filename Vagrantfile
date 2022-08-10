@@ -6,13 +6,38 @@
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 Vagrant.configure("2") do |config|
-  # The most common configuration options are documented and commented below.
-  # For a complete reference, please see the online documentation at
-  # https://docs.vagrantup.com.
+  config.vm.define "m1" do |m1|
+    m1.vm.box = "debian11"
 
-  # Every Vagrant development environment requires a box. You can search for
-  # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "debian11"
+    m1.vm.provider "virtualbox" do |vb|
+      vb.memory = 400  # 4G
+      vb.cpus = 3
+    end
+
+    m1.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+  end
+
+  config.vm.define "m2" do |m2|
+    m2.vm.box = "debian11"
+
+    m2.vm.provider "virtualbox" do |vb|
+      vb.memory = 300  # 3G
+      vb.cpus = 2
+    end
+
+    m2.vm.network "forwarded_port", guest: 80, host: 8081, host_ip: "127.0.0.1"
+  end
+
+  config.vm.define "m3" do |m3|
+    m3.vm.box = "debian11"
+
+    m3.vm.provider "virtualbox" do |vb|
+      vb.memory = 400  # 2G
+      vb.cpus = 2
+    end
+
+    m3.vm.network "forwarded_port", guest: 80, host: 8082, host_ip: "127.0.0.1"
+  end
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -45,19 +70,6 @@ Vagrant.configure("2") do |config|
   # argument is a set of non-required options.
   # config.vm.synced_folder "../data", "/vagrant_data"
 
-  # Provider-specific configuration so you can fine-tune various
-  # backing providers for Vagrant. These expose provider-specific options.
-  # Example for VirtualBox:
-  #
-  config.vm.provider "virtualbox" do |vb|
-    # Display the VirtualBox GUI when booting the machine
-    # vb.gui = true
-  
-    # Customize the amount of memory on the VM:
-    vb.memory = 400
-    vb.cpus = 3
-  end
-  #
   # View the documentation for the provider you are using for more
   # information on available options.
 
