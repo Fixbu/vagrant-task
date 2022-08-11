@@ -7,18 +7,22 @@
 # you're doing.
 Vagrant.configure("2") do |config|
   config.vm.define "m1" do |m1|
-    m1.vm.box = "debian11"
+    m1.vm.box = "bionic"
 
     m1.vm.provider "virtualbox" do |vb|
-      vb.memory = 400  # 4G
+      vb.memory = 1000  # 4G
       vb.cpus = 3
     end
 
     m1.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+
+    m1.vm.provision "ansible" do |ansible|
+      ansible.playbook = "playbook.yml"
+    end
   end
 
   config.vm.define "m2" do |m2|
-    m2.vm.box = "debian11"
+    m2.vm.box = "bionic"
 
     m2.vm.provider "virtualbox" do |vb|
       vb.memory = 300  # 3G
@@ -29,7 +33,7 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.define "m3" do |m3|
-    m3.vm.box = "debian11"
+    m3.vm.box = "bionic"
 
     m3.vm.provider "virtualbox" do |vb|
       vb.memory = 400  # 2G

@@ -1,0 +1,29 @@
+---
+- hosts: m1
+  become: yes
+  pre_tasks:
+    - debug: var=ansible_all_ipv4_addresses
+    - debug: var=ansible_default_ipv4.address
+    - name: Install pip3
+      ansible.builtin.apt:
+        name: python3-pip
+        update_cache: yes
+    - name: Install krb5-config(1)
+      ansible.builtin.apt:
+        name: libkrb5-dev
+    - name: Install deps of python-ldap
+      ansible.builtin.apt:
+        pkg:
+          - libsasl2-dev 
+          - python3-dev
+          - libldap2-dev 
+          - libssl-dev
+  roles:
+    - role: timorunge.freeipa_server
+      vars:
+        freeipa_server_realm: ME.FREEIPA
+        freeipa_server_domain: me.freeipa
+        freeipa_server_fqdn: me.freeipa
+        freeipa_server_ds_password: password
+        freeipa_server_admin_password: password
+        freeipa_server_ip: "{{ ansible_default_ipv4.address }}"
